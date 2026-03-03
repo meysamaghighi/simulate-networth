@@ -1,0 +1,344 @@
+:root {
+  --bg: #f0f4f8;
+  --card: #ffffff;
+  --primary: #1a56db;
+  --primary-light: #e8effc;
+  --accent: #0e9f6e;
+  --accent-light: #def7ec;
+  --text: #1f2937;
+  --text-light: #6b7280;
+  --border: #e5e7eb;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
+  --radius: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+header {
+  text-align: center;
+  padding: 32px 0 24px;
+}
+
+header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+/* Cards */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s;
+}
+
+.card:hover { box-shadow: var(--shadow-lg); }
+
+.card h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+.card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 14px;
+  color: var(--text);
+}
+
+/* Fields */
+.fields-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+  background: #fff;
+}
+
+.input-wrap:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.input-wrap input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: transparent;
+  min-width: 0;
+}
+
+.input-wrap .unit {
+  padding: 0 12px;
+  font-size: 0.82rem;
+  color: var(--text-light);
+  font-weight: 500;
+  white-space: nowrap;
+  background: #f9fafb;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  border-left: 1px solid var(--border);
+}
+
+.hint {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  line-height: 1.4;
+}
+
+/* Toggle */
+.toggle-group {
+  display: flex;
+  gap: 0;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.toggle-btn {
+  padding: 10px 28px;
+  border: none;
+  background: #fff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-light);
+  transition: all 0.2s;
+}
+
+.toggle-btn + .toggle-btn { border-left: 1.5px solid var(--border); }
+
+.toggle-btn.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.toggle-btn:hover:not(.active) { background: var(--primary-light); }
+
+/* Equity display */
+.equity-display .equity-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent);
+  padding: 8px 0;
+}
+
+/* Calculate button */
+.calculate-btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(26, 86, 219, 0.3);
+}
+
+.calculate-btn:hover {
+  background: #1648b8;
+  box-shadow: 0 4px 14px rgba(26, 86, 219, 0.4);
+  transform: translateY(-1px);
+}
+
+.calculate-btn:active { transform: translateY(0); }
+
+/* Results */
+.results { border-top: 3px solid var(--primary); }
+
+.result-hero {
+  text-align: center;
+  padding: 24px 0 16px;
+}
+
+.result-hero.secondary { padding-top: 0; padding-bottom: 24px; }
+
+.result-number {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.result-number.small {
+  font-size: 1.5rem;
+  color: var(--text-light);
+}
+
+.result-label {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+/* Breakdown */
+.breakdown { margin-bottom: 24px; }
+
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.breakdown-item {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.breakdown-item .bi-label {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.breakdown-item .bi-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.breakdown-item.highlight {
+  background: var(--accent-light);
+}
+
+.breakdown-item.highlight .bi-value {
+  color: var(--accent);
+}
+
+/* Chart */
+.chart-container {
+  margin-bottom: 20px;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  max-height: 300px;
+}
+
+/* Disclaimer */
+.disclaimer {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  line-height: 1.6;
+  padding: 14px;
+  background: #fefce8;
+  border-radius: 8px;
+  border: 1px solid #fde68a;
+}
+
+.disclaimer a { color: var(--primary); }
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 32px 0 16px;
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+/* Hidden */
+.hidden { display: none !important; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .container { padding: 12px 12px 36px; }
+
+  header { padding: 20px 0 16px; }
+  header h1 { font-size: 1.4rem; }
+
+  .card { padding: 18px 16px; }
+
+  .fields-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .breakdown-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-number { font-size: 1.9rem; }
+  .result-number.small { font-size: 1.25rem; }
+
+  .toggle-btn { padding: 10px 24px; }
+}
+
+/* Number input spinners - subtle */
+input[type="number"]::-webkit-inner-spin-button {
+  opacity: 0.4;
+}
+
+input[type="number"]:hover::-webkit-inner-spin-button {
+  opacity: 1;
+}
+
+/* Smooth reveal animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.results:not(.hidden) {
+  animation: fadeIn 0.4s ease-out;
+}

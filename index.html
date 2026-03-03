@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swedish Family Net Worth Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Family Net Worth Calculator</h1>
+      <p class="subtitle">Projection tool for families living in Sweden</p>
+    </header>
+
+    <section class="card" id="family-setup">
+      <h2>Family Setup</h2>
+      <div class="field">
+        <label>Number of income earners</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active" data-value="1" onclick="setEarners(1)">1</button>
+          <button class="toggle-btn" data-value="2" onclick="setEarners(2)">2</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="targetAge">Target age for projection</label>
+        <div class="input-wrap">
+          <input type="number" id="targetAge" value="67" min="30" max="100">
+          <span class="unit">years</span>
+        </div>
+        <span class="hint">Swedish retirement age is 67</span>
+      </div>
+    </section>
+
+    <!-- Earner 1 -->
+    <section class="card earner-card" id="earner1-card">
+      <h2 id="earner1-title">Your Details</h2>
+      <div class="fields-grid">
+        <div class="field">
+          <label for="age1">Age</label>
+          <div class="input-wrap">
+            <input type="number" id="age1" value="35" min="18" max="99">
+            <span class="unit">years</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="income1">Monthly gross income</label>
+          <div class="input-wrap">
+            <input type="number" id="income1" value="45000" step="1000">
+            <span class="unit">kr</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="retirement1">Current retirement savings</label>
+          <div class="input-wrap">
+            <input type="number" id="retirement1" value="500000" step="10000">
+            <span class="unit">kr</span>
+          </div>
+          <span class="hint">Check your total at minpension.se</span>
+        </div>
+        <div class="field">
+          <label for="extraInvest1">Monthly extra investment</label>
+          <div class="input-wrap">
+            <input type="number" id="extraInvest1" value="2000" step="500">
+            <span class="unit">kr</span>
+          </div>
+          <span class="hint">E.g. Avanza Zero (Swedish index, ~0% fee)</span>
+        </div>
+        <div class="field">
+          <label for="currentInvestments1">Current investment portfolio</label>
+          <div class="input-wrap">
+            <input type="number" id="currentInvestments1" value="100000" step="10000">
+            <span class="unit">kr</span>
+          </div>
+          <span class="hint">Stocks, funds, ISK etc.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Earner 2 -->
+    <section class="card earner-card hidden" id="earner2-card">
+      <h2>Partner's Details</h2>
+      <div class="fields-grid">
+        <div class="field">
+          <label for="age2">Age</label>
+          <div class="input-wrap">
+            <input type="number" id="age2" value="33" min="18" max="99">
+            <span class="unit">years</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="income2">Monthly gross income</label>
+          <div class="input-wrap">
+            <input type="number" id="income2" value="40000" step="1000">
+            <span class="unit">kr</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="retirement2">Current retirement savings</label>
+          <div class="input-wrap">
+            <input type="number" id="retirement2" value="350000" step="10000">
+            <span class="unit">kr</span>
+          </div>
+          <span class="hint">Check your total at minpension.se</span>
+        </div>
+        <div class="field">
+          <label for="extraInvest2">Monthly extra investment</label>
+          <div class="input-wrap">
+            <input type="number" id="extraInvest2" value="1500" step="500">
+            <span class="unit">kr</span>
+          </div>
+          <span class="hint">E.g. Avanza Zero (Swedish index, ~0% fee)</span>
+        </div>
+        <div class="field">
+          <label for="currentInvestments2">Current investment portfolio</label>
+          <div class="input-wrap">
+            <input type="number" id="currentInvestments2" value="50000" step="10000">
+            <span class="unit">kr</span>
+          </div>
+          <span class="hint">Stocks, funds, ISK etc.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Housing -->
+    <section class="card" id="housing-card">
+      <h2>Housing</h2>
+      <div class="fields-grid">
+        <div class="field">
+          <label for="houseValue">Property market value</label>
+          <div class="input-wrap">
+            <input type="number" id="houseValue" value="4000000" step="100000">
+            <span class="unit">kr</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="mortgageRemaining">Mortgage remaining</label>
+          <div class="input-wrap">
+            <input type="number" id="mortgageRemaining" value="3000000" step="100000">
+            <span class="unit">kr</span>
+          </div>
+        </div>
+        <div class="field equity-display">
+          <label>Current home equity</label>
+          <div class="equity-value" id="equityDisplay">1 000 000 kr</div>
+          <span class="hint">Equity = Property value &minus; Mortgage remaining</span>
+        </div>
+        <div class="field">
+          <label for="mortgageRate">Mortgage interest rate</label>
+          <div class="input-wrap">
+            <input type="number" id="mortgageRate" value="3.2" step="0.1" min="0" max="15">
+            <span class="unit">%</span>
+          </div>
+          <span class="hint">Typical Swedish rate in 2026: ~3-4%</span>
+        </div>
+        <div class="field">
+          <label for="amortization">Monthly amortization</label>
+          <div class="input-wrap">
+            <input type="number" id="amortization" value="5000" step="500">
+            <span class="unit">kr</span>
+          </div>
+          <span class="hint">Swedish amortization rules: 1-2% of loan/year</span>
+        </div>
+        <div class="field">
+          <label for="houseAppreciation">Annual property appreciation</label>
+          <div class="input-wrap">
+            <input type="number" id="houseAppreciation" value="2.0" step="0.5" min="0" max="15">
+            <span class="unit">%</span>
+          </div>
+          <span class="hint">Historical Swedish average: ~2-3%/year</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Assumptions -->
+    <section class="card" id="assumptions-card">
+      <h2>Growth Assumptions</h2>
+      <div class="fields-grid">
+        <div class="field">
+          <label for="pensionReturn">Pension fund annual return</label>
+          <div class="input-wrap">
+            <input type="number" id="pensionReturn" value="6.0" step="0.5" min="0" max="20">
+            <span class="unit">%</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="investmentReturn">Investment annual return</label>
+          <div class="input-wrap">
+            <input type="number" id="investmentReturn" value="8.0" step="0.5" min="0" max="20">
+            <span class="unit">%</span>
+          </div>
+          <span class="hint">Swedish index historical average: ~8-10%</span>
+        </div>
+        <div class="field">
+          <label for="salaryGrowth">Annual salary growth</label>
+          <div class="input-wrap">
+            <input type="number" id="salaryGrowth" value="2.5" step="0.5" min="0" max="15">
+            <span class="unit">%</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="inflation">Inflation (for real values)</label>
+          <div class="input-wrap">
+            <input type="number" id="inflation" value="2.0" step="0.5" min="0" max="15">
+            <span class="unit">%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <button class="calculate-btn" onclick="calculate()">Calculate Net Worth</button>
+
+    <!-- Results -->
+    <section class="card results hidden" id="results">
+      <h2>Projected Family Net Worth</h2>
+      <div class="result-hero">
+        <div class="result-number" id="totalNetWorth">0 kr</div>
+        <div class="result-label">at age <span id="resultAge">67</span> (nominal)</div>
+      </div>
+      <div class="result-hero secondary">
+        <div class="result-number small" id="totalNetWorthReal">0 kr</div>
+        <div class="result-label">in today's money (inflation-adjusted)</div>
+      </div>
+
+      <div class="breakdown">
+        <h3>Breakdown</h3>
+        <div class="breakdown-grid" id="breakdownGrid"></div>
+      </div>
+
+      <div class="chart-container">
+        <h3>Net Worth Over Time</h3>
+        <canvas id="chart"></canvas>
+      </div>
+
+      <div class="disclaimer">
+        <strong>Disclaimer:</strong> This is a simplified projection. Actual results depend on market conditions, tax law changes, and personal circumstances. Pension calculations are approximate &mdash; check <a href="https://www.minpension.se" target="_blank">minpension.se</a> for detailed pension forecasts. ISK tax (~0.9-1.1%/year on capital) is not deducted in this model. Consult a financial advisor for personalized advice.
+      </div>
+    </section>
+
+    <footer>
+      <p>Built for families in Sweden &middot; Data is never sent anywhere &middot; 100% client-side</p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
