@@ -132,8 +132,14 @@ function calculate() {
   let mortgageRemaining = val('mortgageRemaining');
   const monthlyAmort = val('amortization');
 
+  // Options
+  const reinvestAmort = document.getElementById('reinvestAmortization').checked;
+
   // Per-earner calculation
-  function calcEarner(idx) {
+  // mortgagePaidOffYear is set during housing projection, so we do two passes:
+  // Pass 1: housing to find debt-free year. Pass 2: earners with redirect.
+  // But earners are independent of housing timing, so we pass a callback.
+  function calcEarner(idx, getExtraMonthly) {
     const age = val('age' + idx);
     const monthlyIncome = val('income' + idx);
     let retirement = val('retirement' + idx);
@@ -154,8 +160,11 @@ function calculate() {
       // Grow retirement: compound + contributions
       retirement = retirement * (1 + pensionReturn) + pensionContrib;
 
-      // Grow investments: compound (net of ISK tax) + monthly contributions
-      investments = investments * (1 + netInvestReturn) + monthlyInvest * 12;
+      // Extra monthly from redirected amortization (split between earners)
+      const extraMonthly = getExtraMonthly(y);
+
+      // Grow investments: compound (net of ISK tax) + monthly contributions + redirect
+      investments = investments * (1 + netInvestReturn) + (monthlyInvest + extraMonthly) * 12;
 
       // Salary grows
       currentMonthlyIncome *= (1 + salaryGrowth);
@@ -166,23 +175,24 @@ function calculate() {
     return { retirement, investments, years, yearlyData };
   }
 
-  const e1 = calcEarner(1);
-  const e2 = earnerCount === 2
-    ? calcEarner(2)
-    : { retirement: 0, investments: 0, years: 0, yearlyData: [] };
+  // --- Housing projection first (to find debt-free year) ---
+  const age1 = val('age1');
+  const age2 = earnerCount === 2 ? val('age2') : 0;
+  const prelimMaxYears = Math.max(
+    Math.max(0, targetAge - age1),
+    earnerCount === 2 ? Math.max(0, targetAge - age2) : 0
+  );
 
-  // Housing projection
-  const maxYears = Math.max(e1.years, earnerCount === 2 ? e2.years : 0);
   let projHouseValue = houseValue;
   let projMortgage = mortgageRemaining;
   let totalInterestPaid = 0;
   let totalRanteavdrag = 0;
+  let mortgageFreeYear = null; // year index when mortgage hits 0
   let mortgageFreeAge = null;
 
   const housingYearlyData = [];
 
-  for (let y = 0; y < maxYears; y++) {
-    // Interest for this year (on remaining mortgage)
+  for (let y = 0; y < prelimMaxYears; y++) {
     const yearlyInterest = projMortgage * mortgageRate;
     totalInterestPaid += yearlyInterest;
     totalRanteavdrag += calculateRanteavdrag(yearlyInterest);
@@ -190,8 +200,9 @@ function calculate() {
     projHouseValue *= (1 + houseAppreciation);
     projMortgage = Math.max(0, projMortgage - monthlyAmort * 12);
 
-    if (mortgageFreeAge === null && projMortgage === 0) {
-      mortgageFreeAge = val('age1') + y + 1;
+    if (mortgageFreeYear === null && projMortgage === 0) {
+      mortgageFreeYear = y + 1;
+      mortgageFreeAge = age1 + y + 1;
     }
 
     housingYearlyData.push({
@@ -200,6 +211,23 @@ function calculate() {
       mortgage: projMortgage
     });
   }
+
+  // --- Earner calculations (with amortization redirect) ---
+  // After mortgage is gone, split amortization equally between earners for investing
+  const earnerDivisor = earnerCount;
+  function getRedirectedMonthly(yearIndex) {
+    if (!reinvestAmort) return 0;
+    if (mortgageFreeYear === null) return 0;
+    if (yearIndex >= mortgageFreeYear) return monthlyAmort / earnerDivisor;
+    return 0;
+  }
+
+  const e1 = calcEarner(1, getRedirectedMonthly);
+  const e2 = earnerCount === 2
+    ? calcEarner(2, getRedirectedMonthly)
+    : { retirement: 0, investments: 0, years: 0, yearlyData: [] };
+
+  const maxYears = prelimMaxYears;
 
   const finalEquity = projHouseValue - projMortgage;
 
@@ -224,7 +252,16 @@ function calculate() {
   const milestones = [];
 
   if (mortgageFreeAge && mortgageFreeAge <= targetAge) {
-    milestones.push(`Mortgage-free by age ${mortgageFreeAge}`);
+    milestones.push(`Debt-free at age ${mortgageFreeAge} (Earner 1)`);
+    if (earnerCount === 2) {
+      const debtFreeAge2 = age2 + mortgageFreeYear;
+      if (debtFreeAge2 <= targetAge) {
+        milestones.push(`Debt-free at age ${debtFreeAge2} (Earner 2)`);
+      }
+    }
+    if (reinvestAmort) {
+      milestones.push(`${fmtShort(monthlyAmort)}/mo redirected to investments after debt-free`);
+    }
   }
 
   // Find first million milestone
@@ -314,10 +351,10 @@ function calculate() {
   `).join('');
 
   // --- Chart ---
-  buildChart(e1, e2, housingYearlyData, maxYears);
+  buildChart(e1, e2, housingYearlyData, maxYears, mortgageFreeAge);
 }
 
-function buildChart(e1, e2, housingData, maxYears) {
+function buildChart(e1, e2, housingData, maxYears, debtFreeAge) {
   const ctx = document.getElementById('chart').getContext('2d');
   if (chartInstance) chartInstance.destroy();
 
@@ -345,6 +382,30 @@ function buildChart(e1, e2, housingData, maxYears) {
       pensionData.push(p); investData.push(inv); equityData.push(eq);
       totalData.push(p + inv + eq);
     }
+  }
+
+  // Annotation for debt-free vertical line
+  const annotations = {};
+  if (debtFreeAge && debtFreeAge >= baseAge && debtFreeAge <= baseAge + maxYears) {
+    const debtFreeIndex = debtFreeAge - baseAge;
+    annotations.debtFreeLine = {
+      type: 'line',
+      xMin: debtFreeIndex,
+      xMax: debtFreeIndex,
+      borderColor: '#16a34a',
+      borderWidth: 2,
+      borderDash: [6, 4],
+      label: {
+        display: true,
+        content: `Debt-free (${debtFreeAge})`,
+        position: 'start',
+        backgroundColor: '#16a34a',
+        color: '#fff',
+        font: { size: 11, family: 'Inter', weight: '500' },
+        padding: { top: 4, bottom: 4, left: 8, right: 8 },
+        borderRadius: 4,
+      }
+    };
   }
 
   chartInstance = new Chart(ctx, {
@@ -400,6 +461,7 @@ function buildChart(e1, e2, housingData, maxYears) {
       maintainAspectRatio: true,
       interaction: { mode: 'index', intersect: false },
       plugins: {
+        annotation: { annotations },
         legend: {
           position: 'bottom',
           labels: { boxWidth: 12, padding: 16, font: { size: 12, family: 'Inter' } }
@@ -413,7 +475,7 @@ function buildChart(e1, e2, housingData, maxYears) {
       },
       scales: {
         x: {
-          title: { display: true, text: 'Age', font: { size: 12, family: 'Inter' } },
+          title: { display: true, text: 'Age (Earner 1)', font: { size: 12, family: 'Inter' } },
           grid: { display: false },
           ticks: {
             font: { size: 11 },
@@ -465,6 +527,7 @@ function saveToLocalStorage() {
     const el = document.getElementById(id);
     data[id] = el.dataset.raw !== undefined ? el.dataset.raw : el.value;
   });
+  data.reinvestAmortization = document.getElementById('reinvestAmortization').checked;
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) {}
 }
 
@@ -486,6 +549,9 @@ function loadFromLocalStorage() {
       }
     });
 
+    if (data.reinvestAmortization !== undefined) {
+      document.getElementById('reinvestAmortization').checked = data.reinvestAmortization;
+    }
     if (data.earnerCount) {
       setEarners(data.earnerCount);
     }
@@ -503,6 +569,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Attach auto-calculate to all inputs
   document.querySelectorAll('input').forEach(el => {
     el.addEventListener('input', scheduleCalculation);
+    if (el.type === 'checkbox') {
+      el.addEventListener('change', scheduleCalculation);
+    }
   });
 
   // Load saved state

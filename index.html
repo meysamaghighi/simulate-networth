@@ -179,6 +179,14 @@
           <span class="hint">Historical Swedish average: ~2&ndash;3%/year</span>
         </div>
       </div>
+      <div class="checkbox-field">
+        <label class="checkbox-label">
+          <input type="checkbox" id="reinvestAmortization" checked>
+          <span class="checkmark"></span>
+          <span>After mortgage is paid off, redirect amortization into investments</span>
+        </label>
+        <span class="hint">If unchecked, freed-up amortization is treated as spending.</span>
+      </div>
     </section>
 
     <!-- Assumptions -->
@@ -362,6 +370,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
