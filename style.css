@@ -137,6 +137,8 @@ header h1 {
   line-height: 1.4;
 }
 
+.hint a { color: var(--primary); }
+
 /* Toggle */
 .toggle-group {
   display: flex;
@@ -176,32 +178,6 @@ header h1 {
   padding: 8px 0;
 }
 
-/* Calculate button */
-.calculate-btn {
-  display: block;
-  width: 100%;
-  padding: 16px;
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius);
-  font-family: inherit;
-  font-size: 1.05rem;
-  font-weight: 600;
-  cursor: pointer;
-  margin-bottom: 16px;
-  transition: all 0.2s;
-  box-shadow: 0 2px 8px rgba(26, 86, 219, 0.3);
-}
-
-.calculate-btn:hover {
-  background: #1648b8;
-  box-shadow: 0 4px 14px rgba(26, 86, 219, 0.4);
-  transform: translateY(-1px);
-}
-
-.calculate-btn:active { transform: translateY(0); }
-
 /* Results */
 .results { border-top: 3px solid var(--primary); }
 
@@ -228,6 +204,34 @@ header h1 {
   font-size: 0.9rem;
   color: var(--text-light);
   margin-top: 4px;
+}
+
+/* Milestones */
+.milestones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+  justify-content: center;
+}
+
+.milestone {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.milestone .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
 }
 
 /* Breakdown */
@@ -289,6 +293,69 @@ header h1 {
 
 .disclaimer a { color: var(--primary); }
 
+/* Explanation section */
+.explanation h2 { margin-bottom: 8px; }
+
+.explanation details {
+  border-bottom: 1px solid var(--border);
+}
+
+.explanation details:last-child { border-bottom: none; }
+
+.explanation summary {
+  padding: 14px 0;
+  font-weight: 600;
+  font-size: 0.92rem;
+  cursor: pointer;
+  color: var(--text);
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.explanation summary::after {
+  content: '+';
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--text-light);
+  transition: transform 0.2s;
+}
+
+.explanation details[open] summary::after {
+  content: '\2212';
+}
+
+.explanation summary::-webkit-details-marker { display: none; }
+
+.detail-body {
+  padding: 0 0 16px;
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.detail-body p { margin-bottom: 10px; }
+
+.detail-body ul {
+  margin: 8px 0 8px 20px;
+}
+
+.detail-body li {
+  margin-bottom: 6px;
+  font-size: 0.83rem;
+}
+
+.formula-box {
+  background: var(--bg);
+  border-left: 3px solid var(--primary);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 14px;
+  margin: 10px 0;
+  font-size: 0.83rem;
+  line-height: 1.65;
+}
+
 /* Footer */
 footer {
   text-align: center;
@@ -322,6 +389,8 @@ footer {
   .result-number.small { font-size: 1.25rem; }
 
   .toggle-btn { padding: 10px 24px; }
+
+  .milestones { flex-direction: column; align-items: center; }
 }
 
 /* Number input spinners - subtle */

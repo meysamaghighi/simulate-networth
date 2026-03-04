@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Swedish Family Net Worth Calculator</title>
+  <meta name="description" content="Project your family's net worth at retirement. Built for Sweden with accurate pension, ISK, and mortgage models.">
+  <meta property="og:title" content="Swedish Family Net Worth Calculator">
+  <meta property="og:description" content="Project your family's combined net worth at retirement. Accurate Swedish pension, ISK tax, and ränteavdrag models.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://meysamaghighi.github.io/simulate-networth/og-image.png">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='18' width='100' height='100' fill='%231a56db'/><text x='50' y='72' font-size='60' text-anchor='middle' fill='white'>kr</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -15,6 +21,7 @@
       <p class="subtitle">Projection tool for families living in Sweden</p>
     </header>
 
+    <!-- Family Setup -->
     <section class="card" id="family-setup">
       <h2>Family Setup</h2>
       <div class="field">
@@ -27,7 +34,7 @@
       <div class="field">
         <label for="targetAge">Target age for projection</label>
         <div class="input-wrap">
-          <input type="number" id="targetAge" value="67" min="30" max="100">
+          <input type="number" id="targetAge" value="67" min="18" max="100">
           <span class="unit">years</span>
         </div>
         <span class="hint">Swedish retirement age is 67</span>
@@ -48,22 +55,22 @@
         <div class="field">
           <label for="income1">Monthly gross income</label>
           <div class="input-wrap">
-            <input type="number" id="income1" value="45000" step="1000">
+            <input type="text" inputmode="numeric" id="income1" value="45 000" data-raw="45000">
             <span class="unit">kr</span>
           </div>
         </div>
         <div class="field">
           <label for="retirement1">Current retirement savings</label>
           <div class="input-wrap">
-            <input type="number" id="retirement1" value="500000" step="10000">
+            <input type="text" inputmode="numeric" id="retirement1" value="500 000" data-raw="500000">
             <span class="unit">kr</span>
           </div>
-          <span class="hint">Check your total at minpension.se</span>
+          <span class="hint">Check your total at <a href="https://www.minpension.se" target="_blank">minpension.se</a></span>
         </div>
         <div class="field">
           <label for="extraInvest1">Monthly extra investment</label>
           <div class="input-wrap">
-            <input type="number" id="extraInvest1" value="2000" step="500">
+            <input type="text" inputmode="numeric" id="extraInvest1" value="2 000" data-raw="2000">
             <span class="unit">kr</span>
           </div>
           <span class="hint">E.g. Avanza Zero (Swedish index, ~0% fee)</span>
@@ -71,7 +78,7 @@
         <div class="field">
           <label for="currentInvestments1">Current investment portfolio</label>
           <div class="input-wrap">
-            <input type="number" id="currentInvestments1" value="100000" step="10000">
+            <input type="text" inputmode="numeric" id="currentInvestments1" value="100 000" data-raw="100000">
             <span class="unit">kr</span>
           </div>
           <span class="hint">Stocks, funds, ISK etc.</span>
@@ -93,22 +100,22 @@
         <div class="field">
           <label for="income2">Monthly gross income</label>
           <div class="input-wrap">
-            <input type="number" id="income2" value="40000" step="1000">
+            <input type="text" inputmode="numeric" id="income2" value="40 000" data-raw="40000">
             <span class="unit">kr</span>
           </div>
         </div>
         <div class="field">
           <label for="retirement2">Current retirement savings</label>
           <div class="input-wrap">
-            <input type="number" id="retirement2" value="350000" step="10000">
+            <input type="text" inputmode="numeric" id="retirement2" value="350 000" data-raw="350000">
             <span class="unit">kr</span>
           </div>
-          <span class="hint">Check your total at minpension.se</span>
+          <span class="hint">Check your total at <a href="https://www.minpension.se" target="_blank">minpension.se</a></span>
         </div>
         <div class="field">
           <label for="extraInvest2">Monthly extra investment</label>
           <div class="input-wrap">
-            <input type="number" id="extraInvest2" value="1500" step="500">
+            <input type="text" inputmode="numeric" id="extraInvest2" value="1 500" data-raw="1500">
             <span class="unit">kr</span>
           </div>
           <span class="hint">E.g. Avanza Zero (Swedish index, ~0% fee)</span>
@@ -116,7 +123,7 @@
         <div class="field">
           <label for="currentInvestments2">Current investment portfolio</label>
           <div class="input-wrap">
-            <input type="number" id="currentInvestments2" value="50000" step="10000">
+            <input type="text" inputmode="numeric" id="currentInvestments2" value="50 000" data-raw="50000">
             <span class="unit">kr</span>
           </div>
           <span class="hint">Stocks, funds, ISK etc.</span>
@@ -131,14 +138,14 @@
         <div class="field">
           <label for="houseValue">Property market value</label>
           <div class="input-wrap">
-            <input type="number" id="houseValue" value="4000000" step="100000">
+            <input type="text" inputmode="numeric" id="houseValue" value="4 000 000" data-raw="4000000">
             <span class="unit">kr</span>
           </div>
         </div>
         <div class="field">
           <label for="mortgageRemaining">Mortgage remaining</label>
           <div class="input-wrap">
-            <input type="number" id="mortgageRemaining" value="3000000" step="100000">
+            <input type="text" inputmode="numeric" id="mortgageRemaining" value="3 000 000" data-raw="3000000">
             <span class="unit">kr</span>
           </div>
         </div>
@@ -153,15 +160,15 @@
             <input type="number" id="mortgageRate" value="3.2" step="0.1" min="0" max="15">
             <span class="unit">%</span>
           </div>
-          <span class="hint">Typical Swedish rate in 2026: ~3-4%</span>
+          <span class="hint">Typical Swedish rate in 2026: ~3&ndash;4%</span>
         </div>
         <div class="field">
           <label for="amortization">Monthly amortization</label>
           <div class="input-wrap">
-            <input type="number" id="amortization" value="5000" step="500">
+            <input type="text" inputmode="numeric" id="amortization" value="5 000" data-raw="5000">
             <span class="unit">kr</span>
           </div>
-          <span class="hint">Swedish amortization rules: 1-2% of loan/year</span>
+          <span class="hint">Amortization rules: 2% if LTV&gt;70%, 1% if 50&ndash;70%</span>
         </div>
         <div class="field">
           <label for="houseAppreciation">Annual property appreciation</label>
@@ -169,7 +176,7 @@
             <input type="number" id="houseAppreciation" value="2.0" step="0.5" min="0" max="15">
             <span class="unit">%</span>
           </div>
-          <span class="hint">Historical Swedish average: ~2-3%/year</span>
+          <span class="hint">Historical Swedish average: ~2&ndash;3%/year</span>
         </div>
       </div>
     </section>
@@ -186,12 +193,12 @@
           </div>
         </div>
         <div class="field">
-          <label for="investmentReturn">Investment annual return</label>
+          <label for="investmentReturn">Investment annual return (gross)</label>
           <div class="input-wrap">
             <input type="number" id="investmentReturn" value="8.0" step="0.5" min="0" max="20">
             <span class="unit">%</span>
           </div>
-          <span class="hint">Swedish index historical average: ~8-10%</span>
+          <span class="hint">Swedish index avg ~8&ndash;10%. ISK tax deducted automatically.</span>
         </div>
         <div class="field">
           <label for="salaryGrowth">Annual salary growth</label>
@@ -210,8 +217,6 @@
       </div>
     </section>
 
-    <button class="calculate-btn" onclick="calculate()">Calculate Net Worth</button>
-
     <!-- Results -->
     <section class="card results hidden" id="results">
       <h2>Projected Family Net Worth</h2>
@@ -224,9 +229,16 @@
         <div class="result-label">in today's money (inflation-adjusted)</div>
       </div>
 
+      <div class="milestones" id="milestones"></div>
+
       <div class="breakdown">
         <h3>Breakdown</h3>
         <div class="breakdown-grid" id="breakdownGrid"></div>
+      </div>
+
+      <div class="breakdown">
+        <h3>Mortgage Summary</h3>
+        <div class="breakdown-grid" id="mortgageSummary"></div>
       </div>
 
       <div class="chart-container">
@@ -235,12 +247,117 @@
       </div>
 
       <div class="disclaimer">
-        <strong>Disclaimer:</strong> This is a simplified projection. Actual results depend on market conditions, tax law changes, and personal circumstances. Pension calculations are approximate &mdash; check <a href="https://www.minpension.se" target="_blank">minpension.se</a> for detailed pension forecasts. ISK tax (~0.9-1.1%/year on capital) is not deducted in this model. Consult a financial advisor for personalized advice.
+        <strong>Disclaimer:</strong> This is a simplified projection tool. Actual outcomes depend on market performance, legislative changes, and personal circumstances. Pension calculations are approximate&mdash;check <a href="https://www.minpension.se" target="_blank">minpension.se</a> for your real pension forecast. Consult a financial advisor for personalized advice.
       </div>
     </section>
 
+    <!-- How It Works -->
+    <section class="card explanation" id="explanation">
+      <h2>How the Calculations Work</h2>
+
+      <details open>
+        <summary>Pension Contributions</summary>
+        <div class="detail-body">
+          <p>Sweden has a multi-pillar pension system. We model two components that grow as invested capital:</p>
+          <div class="formula-box">
+            <strong>Allmän pension (public)</strong><br>
+            18.5% of gross salary, capped at 8.07 &times; IBB (~651 000 kr/year in 2026).<br>
+            Split into inkomstpension (16%) and premiepension (2.5%).<br>
+            We apply the pension fund return rate to the full amount since minpension.se reports it as total capital.
+          </div>
+          <div class="formula-box">
+            <strong>Tjänstepension (occupational, ITP1)</strong><br>
+            4.5% of salary up to 7.5 &times; IBB (~604 500 kr/year).<br>
+            30% on salary above that threshold.<br>
+            Grows at the pension fund return rate.
+          </div>
+          <p>Your starting value from minpension.se already includes all accumulated pension capital. We add yearly contributions on top and compound at your chosen return rate.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>ISK Tax (Schablonbeskattning)</summary>
+        <div class="detail-body">
+          <p>Investments held in an ISK (Investeringssparkonto) are taxed on a deemed return, not on actual gains.</p>
+          <div class="formula-box">
+            <strong>Effective ISK tax rate &asymp; 0.888%/year</strong><br>
+            Calculated as: 30% &times; (government bond rate + 1 percentage point).<br>
+            For 2026, we use the government bond rate ~1.96%, giving 30% &times; 2.96% &asymp; 0.888%.
+          </div>
+          <p>This is deducted from your gross investment return each year. For example, 8% gross return becomes ~7.1% net return in an ISK.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Mortgage Interest Deduction (Ränteavdrag)</summary>
+        <div class="detail-body">
+          <p>Sweden allows tax deductions on mortgage interest payments:</p>
+          <div class="formula-box">
+            <strong>30% deduction</strong> on the first 100 000 kr of interest per year.<br>
+            <strong>21% deduction</strong> on interest above 100 000 kr/year.
+          </div>
+          <p>This effectively reduces your mortgage cost. The yearly tax savings are shown in the mortgage summary. For a 3 000 000 kr loan at 3.2%, annual interest is ~96 000 kr, giving you ~28 800 kr back in tax relief.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Housing Projection</summary>
+        <div class="detail-body">
+          <p>Home equity is calculated as property value minus remaining mortgage.</p>
+          <div class="formula-box">
+            Each year:<br>
+            &bull; Property value grows at the appreciation rate (default 2%).<br>
+            &bull; Mortgage decreases by 12 &times; monthly amortization.<br>
+            &bull; Mortgage cannot go below zero.
+          </div>
+          <p>Swedish amortization requirements: 2% of the loan per year if LTV &gt; 70%, 1% if LTV is 50&ndash;70%. We don't enforce this&mdash;you set your own amortization amount.</p>
+          <p><strong>Note:</strong> If you sell, capital gains tax is 22% of profit (vinstskatt). This is not deducted from the projection but is worth keeping in mind.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Investment Growth</summary>
+        <div class="detail-body">
+          <p>Your non-pension investments (ISK, funds, stocks) are projected using compound growth with monthly contributions.</p>
+          <div class="formula-box">
+            Each year: <em>balance</em> = <em>balance</em> &times; (1 + <em>net return</em>) + 12 &times; <em>monthly investment</em><br><br>
+            Where <em>net return</em> = gross return &minus; ISK tax rate.<br>
+            Default: 8.0% &minus; 0.888% = <strong>7.11% net</strong>.
+          </div>
+          <p>The default 8% gross return reflects the long-term average of the Swedish stock market (OMXS30). Actual returns vary greatly year to year.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Inflation Adjustment</summary>
+        <div class="detail-body">
+          <p>The "today's money" figure divides the nominal net worth by the cumulative inflation factor:</p>
+          <div class="formula-box">
+            <em>Real value</em> = <em>Nominal value</em> &divide; (1 + <em>inflation</em>)<sup><em>years</em></sup>
+          </div>
+          <p>Default inflation is 2%, matching the Riksbank's target. With 2% inflation over 32 years, 1 kr today equals about 1.88 kr in nominal terms&mdash;so a future 10 MSEK is worth roughly 5.3 MSEK in today's purchasing power.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Key Assumptions &amp; Limitations</summary>
+        <div class="detail-body">
+          <ul>
+            <li><strong>IBB (Inkomstbasbelopp) 2026:</strong> estimated at 80 600 kr.</li>
+            <li><strong>Salary growth is uniform</strong>&mdash;no promotions, career breaks, or parental leave modeled.</li>
+            <li><strong>Returns are constant</strong>&mdash;real markets are volatile. Sequence-of-returns risk is not captured.</li>
+            <li><strong>Pension is modeled as capital</strong>, not monthly payouts. Actual pension income depends on annuity rates and life expectancy at withdrawal.</li>
+            <li><strong>No other debts</strong> (CSN, car loans) are included&mdash;subtract these mentally.</li>
+            <li><strong>Tjänstepension assumes ITP1</strong> (born 1979 or later, private sector). Public sector and ITP2 differ.</li>
+            <li><strong>Housing capital gains tax (22%)</strong> is not deducted from projected equity.</li>
+            <li><strong>All inputs are in 2026 SEK.</strong> Future values are nominal unless stated otherwise.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
     <footer>
-      <p>Built for families in Sweden &middot; Data is never sent anywhere &middot; 100% client-side</p>
+      <p>Built for families in Sweden &middot; All data stays in your browser &middot; 100% client-side</p>
     </footer>
   </div>
 
