@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-9V57SNEPCQ"></script>
@@ -17,240 +17,247 @@
   <meta property="og:description" content="Project your family's combined net worth at retirement. Accurate Swedish pension, ISK tax, and ränteavdrag models.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://meysamaghighi.github.io/simulate-networth/og-image.png">
+  <link rel="alternate" hreflang="sv" href="/sv/">
+  <link rel="alternate" hreflang="en" href="/en/">
+  <link rel="alternate" hreflang="x-default" href="/sv/">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='18' width='100' height='100' fill='%231a56db'/><text x='50' y='72' font-size='60' text-anchor='middle' fill='white'>kr</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>Family Net Worth Calculator</h1>
-      <p class="subtitle">Projection tool for families living in Sweden</p>
+      <div class="lang-switcher">
+        <button class="lang-btn" data-lang="sv" onclick="switchLanguage('sv')">SV</button>
+        <button class="lang-btn" data-lang="en" onclick="switchLanguage('en')">EN</button>
+      </div>
+      <h1 data-i18n="title">Familjens nettoförmögenhet</h1>
+      <p class="subtitle" data-i18n="subtitle">Beräkningsverktyg för familjer i Sverige</p>
     </header>
 
     <!-- Family Setup -->
     <section class="card" id="family-setup">
-      <h2>Family Setup</h2>
+      <h2 data-i18n="familySetup">Family Setup</h2>
       <div class="field">
-        <label>Number of income earners</label>
+        <label data-i18n="numEarners">Number of income earners</label>
         <div class="toggle-group">
           <button class="toggle-btn active" data-value="1" onclick="setEarners(1)">1</button>
           <button class="toggle-btn" data-value="2" onclick="setEarners(2)">2</button>
         </div>
       </div>
       <div class="field">
-        <label for="targetAge">Target age for projection</label>
+        <label for="targetAge" data-i18n="targetAgeLabel">Target age for projection</label>
         <div class="input-wrap">
           <input type="number" id="targetAge" value="67" min="18" max="100">
-          <span class="unit">years</span>
+          <span class="unit" data-i18n="targetAgeUnit">years</span>
         </div>
-        <span class="hint">Swedish retirement age is 67</span>
+        <span class="hint" data-i18n="targetAgeHint">Swedish retirement age is 67</span>
       </div>
     </section>
 
     <!-- Earner 1 -->
     <section class="card earner-card" id="earner1-card">
-      <h2 id="earner1-title">Your Details</h2>
+      <h2 id="earner1-title" data-i18n="yourDetails">Your Details</h2>
       <div class="fields-grid">
         <div class="field">
-          <label for="age1">Age</label>
+          <label for="age1" data-i18n="ageLabel">Age</label>
           <div class="input-wrap">
             <input type="number" id="age1" value="35" min="18" max="99">
-            <span class="unit">years</span>
+            <span class="unit" data-i18n="ageUnit">years</span>
           </div>
         </div>
         <div class="field">
-          <label for="income1">Monthly gross income</label>
+          <label for="income1" data-i18n="monthlyGrossIncome">Monthly gross income</label>
           <div class="input-wrap">
             <input type="text" inputmode="numeric" id="income1" value="45 000" data-raw="45000">
             <span class="unit">kr</span>
           </div>
         </div>
         <div class="field">
-          <label for="retirement1">Current retirement savings</label>
+          <label for="retirement1" data-i18n="currentRetirement">Current retirement savings</label>
           <div class="input-wrap">
             <input type="text" inputmode="numeric" id="retirement1" value="500 000" data-raw="500000">
             <span class="unit">kr</span>
           </div>
-          <span class="hint">Check your total at <a href="https://www.minpension.se" target="_blank">minpension.se</a></span>
+          <span class="hint" data-i18n="retirementHint">Check your total at <a href="https://www.minpension.se" target="_blank">minpension.se</a></span>
         </div>
         <div class="field">
-          <label for="extraInvest1">Monthly extra investment</label>
+          <label for="extraInvest1" data-i18n="monthlyExtraInvestment">Monthly extra investment</label>
           <div class="input-wrap">
             <input type="text" inputmode="numeric" id="extraInvest1" value="2 000" data-raw="2000">
             <span class="unit">kr</span>
           </div>
-          <span class="hint">E.g. Avanza Zero (Swedish index, ~0% fee)</span>
+          <span class="hint" data-i18n="investmentHintAvanza">E.g. Avanza Zero (Swedish index, ~0% fee)</span>
         </div>
         <div class="field">
-          <label for="currentInvestments1">Current investment portfolio</label>
+          <label for="currentInvestments1" data-i18n="currentInvestmentPortfolio">Current investment portfolio</label>
           <div class="input-wrap">
             <input type="text" inputmode="numeric" id="currentInvestments1" value="100 000" data-raw="100000">
             <span class="unit">kr</span>
           </div>
-          <span class="hint">Stocks, funds, ISK etc.</span>
+          <span class="hint" data-i18n="investmentPortfolioHint">Stocks, funds, ISK etc.</span>
         </div>
       </div>
     </section>
 
     <!-- Earner 2 -->
     <section class="card earner-card hidden" id="earner2-card">
-      <h2>Partner's Details</h2>
+      <h2 data-i18n="partnerDetails">Partner's Details</h2>
       <div class="fields-grid">
         <div class="field">
-          <label for="age2">Age</label>
+          <label for="age2" data-i18n="ageLabel">Age</label>
           <div class="input-wrap">
             <input type="number" id="age2" value="33" min="18" max="99">
-            <span class="unit">years</span>
+            <span class="unit" data-i18n="ageUnit">years</span>
           </div>
         </div>
         <div class="field">
-          <label for="income2">Monthly gross income</label>
+          <label for="income2" data-i18n="monthlyGrossIncome">Monthly gross income</label>
           <div class="input-wrap">
             <input type="text" inputmode="numeric" id="income2" value="40 000" data-raw="40000">
             <span class="unit">kr</span>
           </div>
         </div>
         <div class="field">
-          <label for="retirement2">Current retirement savings</label>
+          <label for="retirement2" data-i18n="currentRetirement">Current retirement savings</label>
           <div class="input-wrap">
             <input type="text" inputmode="numeric" id="retirement2" value="350 000" data-raw="350000">
             <span class="unit">kr</span>
           </div>
-          <span class="hint">Check your total at <a href="https://www.minpension.se" target="_blank">minpension.se</a></span>
+          <span class="hint" data-i18n="retirementHint">Check your total at <a href="https://www.minpension.se" target="_blank">minpension.se</a></span>
         </div>
         <div class="field">
-          <label for="extraInvest2">Monthly extra investment</label>
+          <label for="extraInvest2" data-i18n="monthlyExtraInvestment">Monthly extra investment</label>
           <div class="input-wrap">
             <input type="text" inputmode="numeric" id="extraInvest2" value="1 500" data-raw="1500">
             <span class="unit">kr</span>
           </div>
-          <span class="hint">E.g. Avanza Zero (Swedish index, ~0% fee)</span>
+          <span class="hint" data-i18n="investmentHintAvanza">E.g. Avanza Zero (Swedish index, ~0% fee)</span>
         </div>
         <div class="field">
-          <label for="currentInvestments2">Current investment portfolio</label>
+          <label for="currentInvestments2" data-i18n="currentInvestmentPortfolio">Current investment portfolio</label>
           <div class="input-wrap">
             <input type="text" inputmode="numeric" id="currentInvestments2" value="50 000" data-raw="50000">
             <span class="unit">kr</span>
           </div>
-          <span class="hint">Stocks, funds, ISK etc.</span>
+          <span class="hint" data-i18n="investmentPortfolioHint">Stocks, funds, ISK etc.</span>
         </div>
       </div>
     </section>
 
     <!-- Housing -->
     <section class="card" id="housing-card">
-      <h2>Housing</h2>
+      <h2 data-i18n="housing">Housing</h2>
       <div class="fields-grid">
         <div class="field">
-          <label for="houseValue">Property market value</label>
+          <label for="houseValue" data-i18n="propertyValue">Property market value</label>
           <div class="input-wrap">
             <input type="text" inputmode="numeric" id="houseValue" value="4 000 000" data-raw="4000000">
             <span class="unit">kr</span>
           </div>
         </div>
         <div class="field">
-          <label for="mortgageRemaining">Mortgage remaining</label>
+          <label for="mortgageRemaining" data-i18n="mortgageRemaining">Mortgage remaining</label>
           <div class="input-wrap">
             <input type="text" inputmode="numeric" id="mortgageRemaining" value="3 000 000" data-raw="3000000">
             <span class="unit">kr</span>
           </div>
         </div>
         <div class="field equity-display">
-          <label>Current home equity</label>
+          <label data-i18n="currentEquity">Current home equity</label>
           <div class="equity-value" id="equityDisplay">1 000 000 kr</div>
-          <span class="hint">Equity = Property value &minus; Mortgage remaining</span>
+          <span class="hint" data-i18n="equityHint">Equity = Property value &minus; Mortgage remaining</span>
         </div>
         <div class="field">
-          <label for="mortgageRate">Mortgage interest rate</label>
+          <label for="mortgageRate" data-i18n="mortgageRate">Mortgage interest rate</label>
           <div class="input-wrap">
             <input type="number" id="mortgageRate" value="3.2" step="0.1" min="0" max="15">
             <span class="unit">%</span>
           </div>
-          <span class="hint">Typical Swedish rate in 2026: ~3&ndash;4%</span>
+          <span class="hint" data-i18n="mortgageRateHint">Typical Swedish rate in 2026: ~3&ndash;4%</span>
         </div>
         <div class="field">
-          <label for="amortization">Monthly amortization</label>
+          <label for="amortization" data-i18n="monthlyAmortization">Monthly amortization</label>
           <div class="input-wrap">
             <input type="text" inputmode="numeric" id="amortization" value="5 000" data-raw="5000">
             <span class="unit">kr</span>
           </div>
-          <span class="hint">Amortization rules: 2% if LTV&gt;70%, 1% if 50&ndash;70%</span>
+          <span class="hint" data-i18n="amortizationHint">Amortization rules: 2% if LTV&gt;70%, 1% if 50&ndash;70%</span>
         </div>
         <div class="field">
-          <label for="houseAppreciation">Annual property appreciation</label>
+          <label for="houseAppreciation" data-i18n="annualAppreciation">Annual property appreciation</label>
           <div class="input-wrap">
             <input type="number" id="houseAppreciation" value="2.0" step="0.5" min="0" max="15">
             <span class="unit">%</span>
           </div>
-          <span class="hint">Historical Swedish average: ~2&ndash;3%/year</span>
+          <span class="hint" data-i18n="appreciationHint">Historical Swedish average: ~2&ndash;3%/year</span>
         </div>
       </div>
       <div class="checkbox-field">
         <label class="checkbox-label">
           <input type="checkbox" id="reinvestAmortization" checked>
           <span class="checkmark"></span>
-          <span>After mortgage is paid off, redirect amortization into investments</span>
+          <span data-i18n="reinvestAmortization">After mortgage is paid off, redirect amortization into investments</span>
         </label>
-        <span class="hint">If unchecked, freed-up amortization is treated as spending.</span>
+        <span class="hint" data-i18n="reinvestHint">If unchecked, freed-up amortization is treated as spending.</span>
       </div>
     </section>
 
     <!-- CSN Student Loans -->
     <section class="card" id="csn-card">
-      <h2>Student Loans (CSN)</h2>
+      <h2 data-i18n="studentLoans">Student Loans (CSN)</h2>
       <div id="csn1-fields">
-        <h3 id="csn1-title" class="csn-earner-title">Your CSN Loan</h3>
+        <h3 id="csn1-title" class="csn-earner-title" data-i18n="yourCSN">Your CSN Loan</h3>
         <div class="fields-grid">
           <div class="field">
-            <label for="csnBalance1">Remaining balance</label>
+            <label for="csnBalance1" data-i18n="remainingBalance">Remaining balance</label>
             <div class="input-wrap">
               <input type="text" inputmode="numeric" id="csnBalance1" value="0" data-raw="0">
               <span class="unit">kr</span>
             </div>
           </div>
           <div class="field">
-            <label for="csnPayment1">Monthly payment</label>
+            <label for="csnPayment1" data-i18n="monthlyPayment">Monthly payment</label>
             <div class="input-wrap">
               <input type="text" inputmode="numeric" id="csnPayment1" value="1 500" data-raw="1500">
               <span class="unit">kr</span>
             </div>
           </div>
           <div class="field">
-            <label for="csnRate1">Interest rate</label>
+            <label for="csnRate1" data-i18n="interestRate">Interest rate</label>
             <div class="input-wrap">
               <input type="number" id="csnRate1" value="0.6" step="0.1" min="0" max="10">
               <span class="unit">%</span>
             </div>
-            <span class="hint">CSN rate 2025: 0.6%</span>
+            <span class="hint" data-i18n="csnRateHint">CSN rate 2025: 0.6%</span>
           </div>
         </div>
       </div>
       <div id="csn2-fields" class="hidden">
-        <h3 class="csn-earner-title">Partner's CSN Loan</h3>
+        <h3 class="csn-earner-title" data-i18n="partnerCSN">Partner's CSN Loan</h3>
         <div class="fields-grid">
           <div class="field">
-            <label for="csnBalance2">Remaining balance</label>
+            <label for="csnBalance2" data-i18n="remainingBalance">Remaining balance</label>
             <div class="input-wrap">
               <input type="text" inputmode="numeric" id="csnBalance2" value="0" data-raw="0">
               <span class="unit">kr</span>
             </div>
           </div>
           <div class="field">
-            <label for="csnPayment2">Monthly payment</label>
+            <label for="csnPayment2" data-i18n="monthlyPayment">Monthly payment</label>
             <div class="input-wrap">
               <input type="text" inputmode="numeric" id="csnPayment2" value="1 500" data-raw="1500">
               <span class="unit">kr</span>
             </div>
           </div>
           <div class="field">
-            <label for="csnRate2">Interest rate</label>
+            <label for="csnRate2" data-i18n="interestRate">Interest rate</label>
             <div class="input-wrap">
               <input type="number" id="csnRate2" value="0.6" step="0.1" min="0" max="10">
               <span class="unit">%</span>
             </div>
-            <span class="hint">CSN rate 2025: 0.6%</span>
+            <span class="hint" data-i18n="csnRateHint">CSN rate 2025: 0.6%</span>
           </div>
         </div>
       </div>
@@ -258,40 +265,40 @@
 
     <!-- Other Loans -->
     <section class="card" id="other-loans-card">
-      <h2>Other Loans</h2>
-      <p class="section-hint">Car loans, personal loans, consumer credit, etc.</p>
+      <h2 data-i18n="otherLoans">Other Loans</h2>
+      <p class="section-hint" data-i18n="otherLoansHint">Car loans, personal loans, consumer credit, etc.</p>
       <div id="otherLoansContainer"></div>
-      <button class="add-loan-btn" onclick="addLoan()">+ Add a loan</button>
+      <button class="add-loan-btn" onclick="addLoan()" data-i18n="addLoan">+ Add a loan</button>
     </section>
 
     <!-- Assumptions -->
     <section class="card" id="assumptions-card">
-      <h2>Growth Assumptions</h2>
+      <h2 data-i18n="growthAssumptions">Growth Assumptions</h2>
       <div class="fields-grid">
         <div class="field">
-          <label for="pensionReturn">Pension fund annual return</label>
+          <label for="pensionReturn" data-i18n="pensionReturn">Pension fund annual return</label>
           <div class="input-wrap">
             <input type="number" id="pensionReturn" value="6.0" step="0.5" min="0" max="20">
             <span class="unit">%</span>
           </div>
         </div>
         <div class="field">
-          <label for="investmentReturn">Investment annual return (gross)</label>
+          <label for="investmentReturn" data-i18n="investmentReturn">Investment annual return (gross)</label>
           <div class="input-wrap">
             <input type="number" id="investmentReturn" value="8.0" step="0.5" min="0" max="20">
             <span class="unit">%</span>
           </div>
-          <span class="hint">Swedish index avg ~8&ndash;10%. ISK tax deducted automatically.</span>
+          <span class="hint" data-i18n="investmentReturnHint">Swedish index avg ~8&ndash;10%. ISK tax deducted automatically.</span>
         </div>
         <div class="field">
-          <label for="salaryGrowth">Annual salary growth</label>
+          <label for="salaryGrowth" data-i18n="salaryGrowth">Annual salary growth</label>
           <div class="input-wrap">
             <input type="number" id="salaryGrowth" value="2.5" step="0.5" min="0" max="15">
             <span class="unit">%</span>
           </div>
         </div>
         <div class="field">
-          <label for="inflation">Inflation (for real values)</label>
+          <label for="inflation" data-i18n="inflationLabel">Inflation (for real values)</label>
           <div class="input-wrap">
             <input type="number" id="inflation" value="2.0" step="0.5" min="0" max="15">
             <span class="unit">%</span>
@@ -302,50 +309,64 @@
 
     <!-- Results -->
     <section class="card results hidden" id="results">
-      <h2>Projected Family Net Worth</h2>
+      <h2 data-i18n="projectedNetWorth">Projected Family Net Worth</h2>
       <div class="result-hero">
         <div class="result-number" id="totalNetWorth">0 kr</div>
-        <div class="result-label">at age <span id="resultAge">67</span> (nominal)</div>
+        <div class="result-label"><span data-i18n="atAge">at age</span> <span id="resultAge">67</span> <span data-i18n="nominal">(nominal)</span></div>
       </div>
       <div class="result-hero secondary">
         <div class="result-number small" id="totalNetWorthReal">0 kr</div>
-        <div class="result-label">in today's money (inflation-adjusted)</div>
+        <div class="result-label" data-i18n="inTodaysMoney">in today's money (inflation-adjusted)</div>
       </div>
 
       <div class="milestones" id="milestones"></div>
 
       <div class="breakdown">
-        <h3>Breakdown</h3>
+        <h3 data-i18n="breakdown">Breakdown</h3>
         <div class="breakdown-grid" id="breakdownGrid"></div>
       </div>
 
       <div class="breakdown">
-        <h3>Mortgage Summary</h3>
+        <h3 data-i18n="mortgageSummary">Mortgage Summary</h3>
         <div class="breakdown-grid" id="mortgageSummary"></div>
       </div>
 
       <div class="breakdown hidden" id="loanSummarySection">
-        <h3>Loan Summary</h3>
+        <h3 data-i18n="loanSummary">Loan Summary</h3>
         <div class="breakdown-grid" id="loanSummary"></div>
       </div>
 
       <div class="chart-container">
-        <h3>Net Worth Over Time</h3>
+        <h3 data-i18n="chartTitle">Net Worth Over Time</h3>
         <canvas id="chart"></canvas>
       </div>
 
-      <div class="disclaimer">
+      <!-- Affiliate CTA -->
+      <div class="affiliate-section">
+        <h3 data-i18n="affiliateHeading">Ready to start investing?</h3>
+        <p data-i18n="affiliateText">Open a free ISK account and start building your wealth today.</p>
+        <div class="affiliate-buttons">
+          <a href="https://www.avanza.se/kund/tipsa-en-van.html" target="_blank" rel="noopener" class="affiliate-btn avanza">
+            <span data-i18n="affiliateAvanza">Open Avanza account</span>
+          </a>
+          <a href="https://www.nordnet.se/kampanjer/tipsa-en-van" target="_blank" rel="noopener" class="affiliate-btn nordnet">
+            <span data-i18n="affiliateNordnet">Open Nordnet account</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="disclaimer" data-i18n="disclaimer">
         <strong>Disclaimer:</strong> This is a simplified projection tool. Actual outcomes depend on market performance, legislative changes, and personal circumstances. Pension calculations are approximate&mdash;check <a href="https://www.minpension.se" target="_blank">minpension.se</a> for your real pension forecast. Consult a financial advisor for personalized advice.
       </div>
     </section>
 
     <!-- How It Works -->
     <section class="card explanation" id="explanation">
-      <h2>How the Calculations Work</h2>
+      <h2 data-i18n="howItWorks">How the Calculations Work</h2>
 
       <details open>
-        <summary>Pension Contributions</summary>
-        <div class="detail-body">
+        <summary data-i18n="pensionContribTitle">Pension Contributions</summary>
+        <div class="detail-body" data-i18n="pensionContribBody">
           <p>Sweden has a multi-pillar pension system. We model two components that grow as invested capital:</p>
           <div class="formula-box">
             <strong>Allmän pension (public)</strong><br>
@@ -364,8 +385,8 @@
       </details>
 
       <details>
-        <summary>ISK Tax (Schablonbeskattning)</summary>
-        <div class="detail-body">
+        <summary data-i18n="iskTaxTitle">ISK Tax (Schablonbeskattning)</summary>
+        <div class="detail-body" data-i18n="iskTaxBody">
           <p>Investments held in an ISK (Investeringssparkonto) are taxed on a deemed return, not on actual gains.</p>
           <div class="formula-box">
             <strong>Effective ISK tax rate &asymp; 0.888%/year</strong><br>
@@ -377,8 +398,8 @@
       </details>
 
       <details>
-        <summary>Mortgage Interest Deduction (Ränteavdrag)</summary>
-        <div class="detail-body">
+        <summary data-i18n="mortgageDeductionTitle">Mortgage Interest Deduction (Ränteavdrag)</summary>
+        <div class="detail-body" data-i18n="mortgageDeductionBody">
           <p>Sweden allows tax deductions on mortgage interest payments:</p>
           <div class="formula-box">
             <strong>30% deduction</strong> on the first 100 000 kr of interest per year.<br>
@@ -389,8 +410,8 @@
       </details>
 
       <details>
-        <summary>Housing Projection</summary>
-        <div class="detail-body">
+        <summary data-i18n="housingProjectionTitle">Housing Projection</summary>
+        <div class="detail-body" data-i18n="housingProjectionBody">
           <p>Home equity is calculated as property value minus remaining mortgage.</p>
           <div class="formula-box">
             Each year:<br>
@@ -404,8 +425,8 @@
       </details>
 
       <details>
-        <summary>Student &amp; Consumer Loans</summary>
-        <div class="detail-body">
+        <summary data-i18n="loansExplanationTitle">Student &amp; Consumer Loans</summary>
+        <div class="detail-body" data-i18n="loansExplanationBody">
           <p>CSN student loans and other consumer debts (car loans, personal loans) are projected using simple annual amortization:</p>
           <div class="formula-box">
             Each year: <em>balance</em> = <em>balance</em> &times; (1 + <em>interest rate</em>) &minus; 12 &times; <em>monthly payment</em><br><br>
@@ -420,8 +441,8 @@
       </details>
 
       <details>
-        <summary>Investment Growth</summary>
-        <div class="detail-body">
+        <summary data-i18n="investmentGrowthTitle">Investment Growth</summary>
+        <div class="detail-body" data-i18n="investmentGrowthBody">
           <p>Your non-pension investments (ISK, funds, stocks) are projected using compound growth with monthly contributions.</p>
           <div class="formula-box">
             Each year: <em>balance</em> = <em>balance</em> &times; (1 + <em>net return</em>) + 12 &times; <em>monthly investment</em><br><br>
@@ -433,8 +454,8 @@
       </details>
 
       <details>
-        <summary>Inflation Adjustment</summary>
-        <div class="detail-body">
+        <summary data-i18n="inflationTitle">Inflation Adjustment</summary>
+        <div class="detail-body" data-i18n="inflationBody">
           <p>The "today's money" figure divides the nominal net worth by the cumulative inflation factor:</p>
           <div class="formula-box">
             <em>Real value</em> = <em>Nominal value</em> &divide; (1 + <em>inflation</em>)<sup><em>years</em></sup>
@@ -444,8 +465,8 @@
       </details>
 
       <details>
-        <summary>Key Assumptions &amp; Limitations</summary>
-        <div class="detail-body">
+        <summary data-i18n="assumptionsTitle">Key Assumptions &amp; Limitations</summary>
+        <div class="detail-body" data-i18n="assumptionsBody">
           <ul>
             <li><strong>IBB (Inkomstbasbelopp) 2026:</strong> estimated at 80 600 kr.</li>
             <li><strong>Salary growth is uniform</strong>&mdash;no promotions, career breaks, or parental leave modeled.</li>
@@ -461,12 +482,13 @@
     </section>
 
     <footer>
-      <p>Built for families in Sweden &middot; All data stays in your browser &middot; 100% client-side</p>
+      <p data-i18n="footer">Built for families in Sweden &middot; All data stays in your browser &middot; 100% client-side</p>
     </footer>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
-  <script src="app.js?v=2"></script>
+  <script src="translations.js?v=3"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>

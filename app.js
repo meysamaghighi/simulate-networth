@@ -78,8 +78,22 @@ function setEarners(n) {
   });
   document.getElementById('earner2-card').classList.toggle('hidden', n === 1);
   document.getElementById('csn2-fields').classList.toggle('hidden', n === 1);
-  document.getElementById('earner1-title').textContent = n === 2 ? 'Earner 1' : 'Your Details';
-  document.getElementById('csn1-title').textContent = n === 2 ? 'Earner 1 CSN Loan' : 'Your CSN Loan';
+
+  // Update earner titles based on language
+  const earner1Title = document.getElementById('earner1-title');
+  const csn1Title = document.getElementById('csn1-title');
+  if (n === 2) {
+    earner1Title.textContent = t('earner1Label');
+    earner1Title.setAttribute('data-i18n', 'earner1Label');
+    csn1Title.textContent = t('earner1CSN');
+    csn1Title.setAttribute('data-i18n', 'earner1CSN');
+  } else {
+    earner1Title.textContent = t('yourDetails');
+    earner1Title.setAttribute('data-i18n', 'yourDetails');
+    csn1Title.textContent = t('yourCSN');
+    csn1Title.setAttribute('data-i18n', 'yourCSN');
+  }
+
   saveToLocalStorage();
   scheduleCalculation();
 }
@@ -150,7 +164,7 @@ function addLoan(name, balance, payment, rate) {
   const id = loanIdCounter++;
   const loan = {
     id,
-    name: name || 'Car loan',
+    name: name || (currentLang === 'sv' ? 'Billån' : 'Car loan'),
     balance: balance !== undefined ? balance : 150000,
     payment: payment !== undefined ? payment : 3000,
     rate: rate !== undefined ? rate : 7
@@ -172,25 +186,25 @@ function renderOtherLoans() {
     <div class="loan-entry" data-loan-id="${loan.id}">
       <div class="loan-entry-header">
         <input type="text" class="loan-name-input" value="${loan.name}" data-field="name" data-loan-id="${loan.id}">
-        <button class="remove-loan-btn" onclick="removeLoan(${loan.id})" title="Remove loan">&times;</button>
+        <button class="remove-loan-btn" onclick="removeLoan(${loan.id})" title="${t('removeLoanTitle')}">&times;</button>
       </div>
       <div class="fields-grid">
         <div class="field">
-          <label>Remaining balance</label>
+          <label>${t('remainingBalance')}</label>
           <div class="input-wrap">
             <input type="text" inputmode="numeric" class="loan-field" data-field="balance" data-loan-id="${loan.id}" value="${formatNumber(loan.balance)}" data-raw="${loan.balance}">
             <span class="unit">kr</span>
           </div>
         </div>
         <div class="field">
-          <label>Monthly payment</label>
+          <label>${t('monthlyPayment')}</label>
           <div class="input-wrap">
             <input type="text" inputmode="numeric" class="loan-field" data-field="payment" data-loan-id="${loan.id}" value="${formatNumber(loan.payment)}" data-raw="${loan.payment}">
             <span class="unit">kr</span>
           </div>
         </div>
         <div class="field">
-          <label>Interest rate</label>
+          <label>${t('interestRate')}</label>
           <div class="input-wrap">
             <input type="number" class="loan-field" data-field="rate" data-loan-id="${loan.id}" value="${loan.rate}" step="0.1" min="0" max="30">
             <span class="unit">%</span>
@@ -253,9 +267,6 @@ function calculate() {
   const reinvestAmort = document.getElementById('reinvestAmortization').checked;
 
   // Per-earner calculation
-  // mortgagePaidOffYear is set during housing projection, so we do two passes:
-  // Pass 1: housing to find debt-free year. Pass 2: earners with redirect.
-  // But earners are independent of housing timing, so we pass a callback.
   function calcEarner(idx, getExtraMonthly) {
     const age = val('age' + idx);
     const monthlyIncome = val('income' + idx);
@@ -304,7 +315,7 @@ function calculate() {
   let projMortgage = mortgageRemaining;
   let totalInterestPaid = 0;
   let totalRanteavdrag = 0;
-  let mortgageFreeYear = null; // year index when mortgage hits 0
+  let mortgageFreeYear = null;
   let mortgageFreeAge = null;
 
   const housingYearlyData = [];
@@ -330,7 +341,6 @@ function calculate() {
   }
 
   // --- Loan projections ---
-  // CSN loans
   const csnLoans = [];
   for (let i = 1; i <= earnerCount; i++) {
     const balance = val('csnBalance' + i);
@@ -342,13 +352,11 @@ function calculate() {
     }
   }
 
-  // Other loans
   const otherLoanProjections = otherLoans.filter(l => l.balance > 0).map(loan => {
     const proj = projectLoan(loan.balance, loan.payment, loan.rate / 100, prelimMaxYears);
     return { name: loan.name, ...proj, startBalance: loan.balance };
   });
 
-  // Combined yearly debt totals
   const allLoans = [...csnLoans, ...otherLoanProjections];
   const yearlyTotalDebt = [];
   for (let y = 0; y < prelimMaxYears; y++) {
@@ -359,12 +367,10 @@ function calculate() {
     yearlyTotalDebt.push(total);
   }
   const startingTotalDebt = allLoans.reduce((sum, l) => {
-    // For CSN, start balance is val('csnBalanceX'); for others, l.startBalance
     return sum + (l.startBalance !== undefined ? l.startBalance : val('csnBalance' + l.earner));
   }, 0);
 
   // --- Earner calculations (with amortization redirect) ---
-  // After mortgage is gone, split amortization equally between earners for investing
   const earnerDivisor = earnerCount;
   function getRedirectedMonthly(yearIndex) {
     if (!reinvestAmort) return 0;
@@ -404,19 +410,19 @@ function calculate() {
   const milestones = [];
 
   if (mortgageFreeAge && mortgageFreeAge <= targetAge) {
-    milestones.push(`Mortgage paid off at age ${mortgageFreeAge}`);
+    milestones.push(t('mortgagePaidOff').replace('{age}', mortgageFreeAge));
     if (earnerCount === 2) {
       const debtFreeAge2 = age2 + mortgageFreeYear;
       if (debtFreeAge2 <= targetAge) {
-        milestones.push(`Mortgage paid off at age ${debtFreeAge2} (Earner 2's age)`);
+        milestones.push(t('mortgagePaidOffEarner2').replace('{age}', debtFreeAge2));
       }
     }
     if (reinvestAmort) {
-      milestones.push(`${fmtShort(monthlyAmort)}/mo redirected to investments after debt-free`);
+      milestones.push(t('redirectedToInvestments').replace('{amount}', fmtShort(monthlyAmort)));
     }
   }
 
-  // Find first million milestone
+  // Find net worth milestones
   const baseAge = val('age1');
   function getNetWorthAtYear(y) {
     if (y === 0) {
@@ -433,13 +439,13 @@ function calculate() {
 
   for (let y = 0; y <= maxYears; y++) {
     if (getNetWorthAtYear(y) >= 5000000) {
-      milestones.push(`5 Mkr net worth at age ${baseAge + y}`);
+      milestones.push(t('netWorthMilestone').replace('{amount}', '5 Mkr').replace('{age}', baseAge + y));
       break;
     }
   }
   for (let y = 0; y <= maxYears; y++) {
     if (getNetWorthAtYear(y) >= 10000000) {
-      milestones.push(`10 Mkr net worth at age ${baseAge + y}`);
+      milestones.push(t('netWorthMilestone').replace('{amount}', '10 Mkr').replace('{age}', baseAge + y));
       break;
     }
   }
@@ -447,10 +453,13 @@ function calculate() {
   // Loan payoff milestones
   for (const loan of csnLoans) {
     if (loan.payoffYear !== null) {
-      const earnerLabel = earnerCount === 2 ? ` (Earner ${loan.earner})` : '';
       const payoffAge = val('age' + loan.earner) + loan.payoffYear;
       if (payoffAge <= targetAge) {
-        milestones.push(`CSN paid off at age ${payoffAge}${earnerLabel}`);
+        if (earnerCount === 2) {
+          milestones.push(t('csnPaidOffEarner').replace('{age}', payoffAge).replace('{earner}', loan.earner));
+        } else {
+          milestones.push(t('csnPaidOff').replace('{age}', payoffAge));
+        }
       }
     }
   }
@@ -458,13 +467,13 @@ function calculate() {
     if (loan.payoffYear !== null) {
       const payoffAge = age1 + loan.payoffYear;
       if (payoffAge <= targetAge) {
-        milestones.push(`${loan.name} paid off at age ${payoffAge}`);
+        milestones.push(t('loanPaidOff').replace('{name}', loan.name).replace('{age}', payoffAge));
       }
     }
   }
 
   if (totalRanteavdrag > 0) {
-    milestones.push(`${fmtShort(totalRanteavdrag)} total tax relief on interest`);
+    milestones.push(t('totalTaxRelief').replace('{amount}', fmtShort(totalRanteavdrag)));
   }
 
   milestonesEl.innerHTML = milestones.map(m =>
@@ -477,22 +486,22 @@ function calculate() {
 
   if (earnerCount === 2) {
     items.push(
-      { label: 'Earner 1 Pension', value: e1.retirement },
-      { label: 'Earner 2 Pension', value: e2.retirement },
-      { label: 'Earner 1 Investments', value: e1.investments },
-      { label: 'Earner 2 Investments', value: e2.investments },
+      { label: t('earner1Pension'), value: e1.retirement },
+      { label: t('earner2Pension'), value: e2.retirement },
+      { label: t('earner1Investments'), value: e1.investments },
+      { label: t('earner2Investments'), value: e2.investments },
     );
   }
   items.push(
-    { label: 'Total Pension', value: totalRetirement },
-    { label: 'Total Investments', value: totalInvestments },
-    { label: 'Home Equity', value: finalEquity },
+    { label: t('totalPension'), value: totalRetirement },
+    { label: t('totalInvestments'), value: totalInvestments },
+    { label: t('homeEquity'), value: finalEquity },
   );
   if (startingTotalDebt > 0) {
-    items.push({ label: 'Remaining Debts', value: -finalDebt });
+    items.push({ label: t('remainingDebts'), value: -finalDebt });
   }
   items.push(
-    { label: 'Combined Net Worth', value: totalNominal, highlight: true },
+    { label: t('combinedNetWorth'), value: totalNominal, highlight: true },
   );
 
   grid.innerHTML = items.map(item => `
@@ -506,10 +515,10 @@ function calculate() {
   const mortgageGrid = document.getElementById('mortgageSummary');
   const effectiveRate = mortgageRate * (1 - RANTEAVDRAG_LOW);
   mortgageGrid.innerHTML = [
-    { label: 'Total interest paid', value: fmt(totalInterestPaid) },
-    { label: 'Total ränteavdrag (tax relief)', value: fmt(totalRanteavdrag) },
-    { label: 'Net interest cost', value: fmt(totalInterestPaid - totalRanteavdrag) },
-    { label: 'Effective interest rate (after deduction)', value: (effectiveRate * 100).toFixed(2) + '%' },
+    { label: t('totalInterestPaid'), value: fmt(totalInterestPaid) },
+    { label: t('totalRanteavdrag'), value: fmt(totalRanteavdrag) },
+    { label: t('netInterestCost'), value: fmt(totalInterestPaid - totalRanteavdrag) },
+    { label: t('effectiveRate'), value: (effectiveRate * 100).toFixed(2) + '%' },
   ].map(item => `
     <div class="breakdown-item">
       <div class="bi-label">${item.label}</div>
@@ -524,15 +533,15 @@ function calculate() {
     const loanGrid = document.getElementById('loanSummary');
     const loanItems = [];
     for (const loan of csnLoans) {
-      const earnerLabel = earnerCount === 2 ? ` (Earner ${loan.earner})` : '';
-      const payoffAge = loan.payoffYear !== null ? val('age' + loan.earner) + loan.payoffYear : 'Not within projection';
-      loanItems.push({ label: `CSN${earnerLabel} paid off at age`, value: String(payoffAge) });
-      loanItems.push({ label: `CSN${earnerLabel} total interest`, value: fmt(loan.totalInterest) });
+      const earnerLabel = earnerCount === 2 ? ` (${t('earner1Label').replace('1', loan.earner)})` : '';
+      const payoffAge = loan.payoffYear !== null ? val('age' + loan.earner) + loan.payoffYear : t('notWithinProjection');
+      loanItems.push({ label: `CSN${earnerLabel} ${t('paidOffAtAge')}`, value: String(payoffAge) });
+      loanItems.push({ label: `CSN${earnerLabel} ${t('totalInterest')}`, value: fmt(loan.totalInterest) });
     }
     for (const loan of otherLoanProjections) {
-      const payoffAge = loan.payoffYear !== null ? age1 + loan.payoffYear : 'Not within projection';
-      loanItems.push({ label: `${loan.name} paid off at age`, value: String(payoffAge) });
-      loanItems.push({ label: `${loan.name} total interest`, value: fmt(loan.totalInterest) });
+      const payoffAge = loan.payoffYear !== null ? age1 + loan.payoffYear : t('notWithinProjection');
+      loanItems.push({ label: `${loan.name} ${t('paidOffAtAge')}`, value: String(payoffAge) });
+      loanItems.push({ label: `${loan.name} ${t('totalInterest')}`, value: fmt(loan.totalInterest) });
     }
     loanGrid.innerHTML = loanItems.map(item => `
       <div class="breakdown-item">
@@ -596,7 +605,7 @@ function buildChart(e1, e2, housingData, yearlyDebt, startDebt, maxYears, debtFr
       borderDash: [6, 4],
       label: {
         display: true,
-        content: `Mortgage paid off (${debtFreeAge})`,
+        content: t('mortgagePaidOffChart').replace('{age}', debtFreeAge),
         position: 'start',
         backgroundColor: '#16a34a',
         color: '#fff',
@@ -613,7 +622,7 @@ function buildChart(e1, e2, housingData, yearlyDebt, startDebt, maxYears, debtFr
       labels,
       datasets: [
         {
-          label: 'Total Net Worth',
+          label: t('chartTotalLabel'),
           data: totalData,
           borderColor: '#0e9f6e',
           backgroundColor: 'rgba(14, 159, 110, 0.08)',
@@ -624,7 +633,7 @@ function buildChart(e1, e2, housingData, yearlyDebt, startDebt, maxYears, debtFr
           pointHitRadius: 10,
         },
         {
-          label: 'Pension',
+          label: t('chartPensionLabel'),
           data: pensionData,
           borderColor: '#1a56db',
           borderWidth: 1.5,
@@ -634,7 +643,7 @@ function buildChart(e1, e2, housingData, yearlyDebt, startDebt, maxYears, debtFr
           pointHitRadius: 10,
         },
         {
-          label: 'Investments',
+          label: t('chartInvestmentsLabel'),
           data: investData,
           borderColor: '#9333ea',
           borderWidth: 1.5,
@@ -644,7 +653,7 @@ function buildChart(e1, e2, housingData, yearlyDebt, startDebt, maxYears, debtFr
           pointHitRadius: 10,
         },
         {
-          label: 'Home Equity',
+          label: t('chartEquityLabel'),
           data: equityData,
           borderColor: '#ea580c',
           borderWidth: 1.5,
@@ -654,7 +663,7 @@ function buildChart(e1, e2, housingData, yearlyDebt, startDebt, maxYears, debtFr
           pointHitRadius: 10,
         },
         ...(hasDebt ? [{
-          label: 'Outstanding Debts',
+          label: t('chartDebtLabel'),
           data: debtData,
           borderColor: '#dc2626',
           borderWidth: 1.5,
@@ -678,13 +687,13 @@ function buildChart(e1, e2, housingData, yearlyDebt, startDebt, maxYears, debtFr
         tooltip: {
           callbacks: {
             label: ctx => ctx.dataset.label + ': ' + fmt(ctx.parsed.y),
-            title: items => 'Age ' + items[0].label
+            title: items => t('chartTooltipAge') + ' ' + items[0].label
           }
         }
       },
       scales: {
         x: {
-          title: { display: true, text: 'Age (Earner 1)', font: { size: 12, family: 'Inter' } },
+          title: { display: true, text: t('chartXAxis'), font: { size: 12, family: 'Inter' } },
           grid: { display: false },
           ticks: {
             font: { size: 11 },
@@ -694,7 +703,7 @@ function buildChart(e1, e2, housingData, yearlyDebt, startDebt, maxYears, debtFr
           }
         },
         y: {
-          title: { display: true, text: 'SEK', font: { size: 12, family: 'Inter' } },
+          title: { display: true, text: t('chartYAxis'), font: { size: 12, family: 'Inter' } },
           grid: { color: '#f3f4f6' },
           ticks: {
             font: { size: 11 },
@@ -784,6 +793,10 @@ function loadFromLocalStorage() {
 
 // --- Init ---
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize language
+  initLanguage();
+  applyTranslations();
+
   // Setup formatted inputs
   document.querySelectorAll('input[inputmode="numeric"]').forEach(setupFormattedInput);
 

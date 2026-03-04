@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    { "source": "/sv", "destination": "/index.html" },
+    { "source": "/sv/", "destination": "/index.html" },
+    { "source": "/en", "destination": "/index.html" },
+    { "source": "/en/", "destination": "/index.html" }
+  ],
+  "redirects": [
+    { "source": "/", "destination": "/sv/", "statusCode": 302 }
+  ]
+}
