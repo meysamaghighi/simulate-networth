@@ -321,6 +321,95 @@ header h1 {
   color: var(--accent);
 }
 
+/* Loan sections */
+.csn-earner-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 16px 0 12px;
+}
+
+.csn-earner-title:first-child,
+#csn1-fields .csn-earner-title {
+  margin-top: 0;
+}
+
+.section-hint {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  margin-bottom: 16px;
+}
+
+.loan-entry {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.loan-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.loan-name-input {
+  border: none;
+  border-bottom: 1.5px solid var(--border);
+  outline: none;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text);
+  padding: 4px 0;
+  background: transparent;
+  width: 200px;
+  transition: border-color 0.2s;
+}
+
+.loan-name-input:focus {
+  border-color: var(--primary);
+}
+
+.remove-loan-btn {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.remove-loan-btn:hover {
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+.add-loan-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--primary);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-loan-btn:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
 /* Chart */
 .chart-container {
   margin-bottom: 20px;

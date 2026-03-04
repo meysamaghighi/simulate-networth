@@ -189,6 +189,73 @@
       </div>
     </section>
 
+    <!-- CSN Student Loans -->
+    <section class="card" id="csn-card">
+      <h2>Student Loans (CSN)</h2>
+      <div id="csn1-fields">
+        <h3 id="csn1-title" class="csn-earner-title">Your CSN Loan</h3>
+        <div class="fields-grid">
+          <div class="field">
+            <label for="csnBalance1">Remaining balance</label>
+            <div class="input-wrap">
+              <input type="text" inputmode="numeric" id="csnBalance1" value="0" data-raw="0">
+              <span class="unit">kr</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="csnPayment1">Monthly payment</label>
+            <div class="input-wrap">
+              <input type="text" inputmode="numeric" id="csnPayment1" value="1 500" data-raw="1500">
+              <span class="unit">kr</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="csnRate1">Interest rate</label>
+            <div class="input-wrap">
+              <input type="number" id="csnRate1" value="0.6" step="0.1" min="0" max="10">
+              <span class="unit">%</span>
+            </div>
+            <span class="hint">CSN rate 2025: 0.6%</span>
+          </div>
+        </div>
+      </div>
+      <div id="csn2-fields" class="hidden">
+        <h3 class="csn-earner-title">Partner's CSN Loan</h3>
+        <div class="fields-grid">
+          <div class="field">
+            <label for="csnBalance2">Remaining balance</label>
+            <div class="input-wrap">
+              <input type="text" inputmode="numeric" id="csnBalance2" value="0" data-raw="0">
+              <span class="unit">kr</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="csnPayment2">Monthly payment</label>
+            <div class="input-wrap">
+              <input type="text" inputmode="numeric" id="csnPayment2" value="1 500" data-raw="1500">
+              <span class="unit">kr</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="csnRate2">Interest rate</label>
+            <div class="input-wrap">
+              <input type="number" id="csnRate2" value="0.6" step="0.1" min="0" max="10">
+              <span class="unit">%</span>
+            </div>
+            <span class="hint">CSN rate 2025: 0.6%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Other Loans -->
+    <section class="card" id="other-loans-card">
+      <h2>Other Loans</h2>
+      <p class="section-hint">Car loans, personal loans, consumer credit, etc.</p>
+      <div id="otherLoansContainer"></div>
+      <button class="add-loan-btn" onclick="addLoan()">+ Add a loan</button>
+    </section>
+
     <!-- Assumptions -->
     <section class="card" id="assumptions-card">
       <h2>Growth Assumptions</h2>
@@ -247,6 +314,11 @@
       <div class="breakdown">
         <h3>Mortgage Summary</h3>
         <div class="breakdown-grid" id="mortgageSummary"></div>
+      </div>
+
+      <div class="breakdown hidden" id="loanSummarySection">
+        <h3>Loan Summary</h3>
+        <div class="breakdown-grid" id="loanSummary"></div>
       </div>
 
       <div class="chart-container">
@@ -324,6 +396,22 @@
       </details>
 
       <details>
+        <summary>Student &amp; Consumer Loans</summary>
+        <div class="detail-body">
+          <p>CSN student loans and other consumer debts (car loans, personal loans) are projected using simple annual amortization:</p>
+          <div class="formula-box">
+            Each year: <em>balance</em> = <em>balance</em> &times; (1 + <em>interest rate</em>) &minus; 12 &times; <em>monthly payment</em><br><br>
+            The balance is clamped to zero (cannot go negative).
+          </div>
+          <p>Outstanding loan balances are <strong>subtracted</strong> from your net worth each year. When a loan is fully paid off, a milestone is shown with the payoff age.</p>
+          <div class="formula-box">
+            <strong>CSN loans</strong> in Sweden have very low interest rates (~0.6% in 2025). Monthly payments are set by CSN based on income, but you can enter your own amount.<br><br>
+            <strong>Consumer loans</strong> (car, personal) typically have higher rates (5&ndash;15%). These are entered manually.
+          </div>
+        </div>
+      </details>
+
+      <details>
         <summary>Investment Growth</summary>
         <div class="detail-body">
           <p>Your non-pension investments (ISK, funds, stocks) are projected using compound growth with monthly contributions.</p>
@@ -355,7 +443,7 @@
             <li><strong>Salary growth is uniform</strong>&mdash;no promotions, career breaks, or parental leave modeled.</li>
             <li><strong>Returns are constant</strong>&mdash;real markets are volatile. Sequence-of-returns risk is not captured.</li>
             <li><strong>Pension is modeled as capital</strong>, not monthly payouts. Actual pension income depends on annuity rates and life expectancy at withdrawal.</li>
-            <li><strong>No other debts</strong> (CSN, car loans) are included&mdash;subtract these mentally.</li>
+            <li><strong>Loan payoff</strong> uses simple amortization&mdash;actual CSN repayment schedules may vary with income-based adjustments.</li>
             <li><strong>Tjänstepension assumes ITP1</strong> (born 1979 or later, private sector). Public sector and ITP2 differ.</li>
             <li><strong>Housing capital gains tax (22%)</strong> is not deducted from projected equity.</li>
             <li><strong>All inputs are in 2026 SEK.</strong> Future values are nominal unless stated otherwise.</li>
