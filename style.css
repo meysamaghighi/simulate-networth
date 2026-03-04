@@ -471,67 +471,12 @@ header h1 {
 
 .disclaimer a { color: var(--primary); }
 
-/* Affiliate section */
-.affiliate-section {
+/* Ad container */
+.ad-container {
+  margin: 20px 0;
   text-align: center;
-  padding: 24px 16px;
-  margin-bottom: 20px;
-  background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-light) 100%);
-  border-radius: 10px;
-  border: 1px solid var(--border);
-}
-
-.affiliate-section h3 {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 6px;
-}
-
-.affiliate-section p {
-  font-size: 0.85rem;
-  color: var(--text-light);
-  margin-bottom: 16px;
-}
-
-.affiliate-buttons {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.affiliate-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 0.88rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-.affiliate-btn.avanza {
-  background: #00c281;
-  color: #fff;
-}
-
-.affiliate-btn.avanza:hover {
-  background: #00a66e;
-  box-shadow: 0 2px 8px rgba(0, 194, 129, 0.3);
-}
-
-.affiliate-btn.nordnet {
-  background: #0046be;
-  color: #fff;
-}
-
-.affiliate-btn.nordnet:hover {
-  background: #003a9e;
-  box-shadow: 0 2px 8px rgba(0, 70, 190, 0.3);
+  min-height: 90px;
+  overflow: hidden;
 }
 
 /* Explanation section */
@@ -641,15 +586,6 @@ footer {
     width: fit-content;
   }
 
-  .affiliate-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .affiliate-btn {
-    width: 100%;
-    justify-content: center;
-  }
 }
 
 /* Number input spinners - subtle */
