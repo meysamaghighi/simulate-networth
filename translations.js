@@ -461,10 +461,19 @@ const translations = {
 // --- Language detection and t() function ---
 let currentLang = 'sv'; // default
 
+function getBasePath() {
+  // GitHub Pages: /simulate-networth/  Vercel: /
+  const host = window.location.hostname;
+  if (host.includes('github.io')) return '/simulate-networth/';
+  return '/';
+}
+
 function detectLanguage() {
   const path = window.location.pathname;
-  if (path.startsWith('/en')) return 'en';
-  if (path.startsWith('/sv')) return 'sv';
+  const base = getBasePath();
+  const relative = path.startsWith(base) ? path.slice(base.length) : path.slice(1);
+  if (relative.startsWith('en')) return 'en';
+  if (relative.startsWith('sv')) return 'sv';
   // Check localStorage fallback
   const stored = localStorage.getItem('swe-networth-lang');
   if (stored && translations[stored]) return stored;
@@ -482,8 +491,16 @@ function initLanguage() {
 
 function switchLanguage(lang) {
   localStorage.setItem('swe-networth-lang', lang);
-  const newPath = '/' + lang + '/';
-  window.location.href = newPath;
+  const base = getBasePath();
+  // On GitHub Pages (no server rewrites), stay on same page and re-apply translations
+  if (base !== '/') {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    applyTranslations();
+    if (typeof calculate === 'function') calculate();
+    return;
+  }
+  window.location.href = '/' + lang + '/';
 }
 
 function applyTranslations() {

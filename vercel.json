@@ -3,7 +3,9 @@
     { "source": "/sv", "destination": "/index.html" },
     { "source": "/sv/", "destination": "/index.html" },
     { "source": "/en", "destination": "/index.html" },
-    { "source": "/en/", "destination": "/index.html" }
+    { "source": "/en/", "destination": "/index.html" },
+    { "source": "/sv/:path+", "destination": "/:path+" },
+    { "source": "/en/:path+", "destination": "/:path+" }
   ],
   "redirects": [
     { "source": "/", "destination": "/sv/", "statusCode": 302 }
