@@ -13,6 +13,7 @@ const translations = {
     // Header
     title: 'Family Net Worth Calculator',
     subtitle: 'Projection tool for families living in Sweden',
+    introText: 'How much will your family have at retirement? This free tool calculates your combined net worth based on the Swedish pension system (public and occupational pensions), ISK savings with flat-rate taxation, home equity with mortgage interest deductions, plus student loans and other debts. Fill in your details below and get a detailed projection with charts and milestones.',
 
     // Family setup
     familySetup: 'Family Setup',
@@ -240,6 +241,7 @@ const translations = {
     // Header
     title: 'Familjens nettoförmögenhet',
     subtitle: 'Beräkningsverktyg för familjer i Sverige',
+    introText: 'Hur mycket kommer din familj att ha vid pensionen? Det här gratisverktyget beräknar er sammanlagda nettoförmögenhet baserat på det svenska pensionssystemet (allmän pension och tjänstepension), ISK-sparande med schablonbeskattning, bostadseget kapital med ränteavdrag, samt studielån och övriga skulder. Fyll i era uppgifter nedan och få en detaljerad prognos med diagram och milstolpar.',
 
     // Family setup
     familySetup: 'Familjens upplägg',
