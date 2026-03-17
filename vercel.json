@@ -8,7 +8,6 @@
     { "source": "/en/:path+", "destination": "/:path+" }
   ],
   "redirects": [
-    { "source": "/:path*", "has": [{ "type": "host", "value": "simulate-networth.vercel.app" }], "destination": "https://cashcalcs.com/net-worth", "statusCode": 301 },
     { "source": "/", "destination": "/sv/", "statusCode": 302 }
   ]
 }
